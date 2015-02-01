@@ -5,11 +5,19 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var isWin = /^win/.test(process.platform);
+if(!isWin)
+   var gpslistener = require("./bin/gps_listener.js")
+
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var gps = require('./routes/gps');
 
 var app = express();
+
+// var globals = {
+//     listenGPS = true
+// }
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

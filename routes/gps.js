@@ -19,9 +19,16 @@ var gps = {
 }
 /* GET vehicle last gps. */
 router.get('/', function(req, res, next) {
-	var last_gps = db.each("SELECT lat, lon, stamp FROM vehicle ORDER BY stamp DESC LIMIT 1", function(err, row){
-    	console.log(row);
-  		res.json(row);
+	// var last_gps =
+  //res.render('gps', {  });
+	db.get("SELECT lat, lon, stamp FROM vehicle ORDER BY stamp DESC LIMIT 1", [], function(err, row){
+		if( typeof row == "undefined"){
+			res.send("No location found.")
+		}
+    	else {
+    		console.log(row);
+  			res.json(row);
+  		}
 	})
 });
 
