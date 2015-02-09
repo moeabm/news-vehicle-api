@@ -38,6 +38,10 @@ if(!isWin){
                 console.log("GPS collected");
                 next_entry_time = new Date() + gps_interval
         	}
+            else 
+            {
+                console.log ("next: " + next_entry_time +"\ncurrent: " + new Date() )
+            }
         });
         
         listener.connect(function() {
