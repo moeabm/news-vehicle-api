@@ -25,7 +25,7 @@ if(!isWin){
         
         listener.on('TPV', function (tpv) {
             //console.log(tpv);
-            //console.log("got data");
+            console.log("got data");
             //TODO add sql insert command
     	if(tpv["mode"] > 1){
     		db.run("INSERT INTO vehicle (lat, lon, stamp) VALUES (?, ?, ?)", [
