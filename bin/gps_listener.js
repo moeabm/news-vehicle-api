@@ -3,12 +3,15 @@ var gpsd = require('node-gpsd');
 
 var sqlite3 = require('sqlite3');
 var db = new sqlite3.Database('vehicle.db');
+var gps_interval = 10000 // miliseconds
+var next_entry_time = 0
+var DAY = 1000 * 60 * 60 * 24
 
 db.serialize(function() {
     db.run("CREATE TABLE if not exists vehicle (lat DECIMAL, lon DECIMAL, stamp DATETIME )");
+    db.run("CREATE INDEX if not exists idx1 on vehicle(stamp)");
 })
 
-console.log(os.type())
 var isWin = (os.type() == "Windows_NT");
 if(!isWin){
     var daemon = new gpsd.Daemon({
@@ -18,22 +21,23 @@ if(!isWin){
 
     daemon.start(function() {
         var listener = new gpsd.Listener({
-    	parse: true
+    	   parse: true
         });
         listener.logger = console;
         console.log("gps listening");
         
         listener.on('TPV', function (tpv) {
             //console.log(tpv);
-            console.log("got data");
-            //TODO add sql insert command
-    	if(tpv["mode"] > 1){
-    		db.run("INSERT INTO vehicle (lat, lon, stamp) VALUES (?, ?, ?)", [
-    			 tpv["lat"],
-    			 tpv["lon"],
-    			 new Date()
-    		] );
-    	}
+            //console.log("got data");
+        	if(tpv["mode"] > 1 && next_entry_time < new Date() ){
+        		db.run("INSERT INTO vehicle (lat, lon, stamp) VALUES (?, ?, ?)", [
+        			 tpv["lat"],
+        			 tpv["lon"],
+        			 new Date()
+        		] );
+                console.log("GPS collected");
+                next_entry_time = new Date() + gps_interval
+        	}
         });
         
         listener.connect(function() {
@@ -59,4 +63,13 @@ exports.resLastCoords = function ( res ){
         }
     })
 }
-// module.exports = daemon;
+
+setInterval( clearOldGps, DAY );
+
+function clearOldGps(){
+    stmt = "DELETE FROM vehicle WHERE stamp < " + (new Date() - (7 * DAY)) ;
+    console.log("clearing GPS: " + stmt)
+    db.run(stmt);
+}
+
+clearOldGps();
