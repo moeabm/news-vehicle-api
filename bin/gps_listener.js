@@ -41,7 +41,7 @@ if(!isWin){
         	}
             else 
             {
-                console.log ("next: " + next_entry_time +"\ncurrent: " + new Date() )
+                //console.log ("next: " + next_entry_time +"\ncurrent: " + new Date() )
             }
         });
         
