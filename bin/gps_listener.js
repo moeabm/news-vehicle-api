@@ -30,18 +30,20 @@ if(!isWin){
             var now = new Date();
             //console.log(tpv);
             //console.log("got data");
-        	if(tpv["mode"] > 1 && next_entry_time < now.getTime() ){
-        		db.run("INSERT INTO vehicle (lat, lon, stamp) VALUES (?, ?, ?)", [
-        			 tpv["lat"],
-        			 tpv["lon"],
-        			 new Date()
-        		] );
-                console.log("GPS collected");
-                next_entry_time = new Date(now.getTime() + gps_interval) 
+        	if(tpv["mode"] > 1) {
+                if( next_entry_time < now.getTime() ){
+            		db.run("INSERT INTO vehicle (lat, lon, stamp) VALUES (?, ?, ?)", [
+            			 tpv["lat"],
+            			 tpv["lon"],
+            			 new Date()
+            		] );
+                    console.log("GPS collected");
+                    next_entry_time = new Date(now.getTime() + gps_interval) 
+                }
         	}
             else 
             {
-                //console.log ("next: " + next_entry_time +"\ncurrent: " + new Date() )
+                console.log ("No Fix (mode "+ tpv["mode"] + ")");
             }
         });
         
