@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var gps = require("../bin/gps_listener.js")
+var gps = require( __dirname + "/../bin/gps_listener.js")
 
 
 

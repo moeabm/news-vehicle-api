@@ -1,0 +1,30 @@
+### BEGIN INIT INFO
+# Provides:              truck-gps
+# Required-Start:    $remote_fs $named $syslog
+# Required-Stop:     $remote_fs $named $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: <Short Description>
+# Description:       <Longer Description>
+### END INIT INFO
+
+#!/bin/bash
+
+#copy this script to /etc/init.d/truck-gps
+
+PATH=$PATH:/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin
+NODESCRIPT=/home/pi/news-vehicle-api/bin
+
+case "$1" in
+  start)
+    sudo -u pi /usr/local/bin/node $NODESCRIPT/www
+    ;;
+  stop)
+    ;;
+  *)
+
+  echo "Usage: /etc/init.d/truck-gps {start|stop}"
+  exit 1
+  ;;
+esac
+exit 0

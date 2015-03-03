@@ -2,7 +2,7 @@ var os = require('os');
 var gpsd = require('node-gpsd');
 
 var sqlite3 = require('sqlite3');
-var db = new sqlite3.Database('vehicle.db');
+var db = new sqlite3.Database( __dirname + '/../vehicle.db');
 var gps_interval = 10000 // miliseconds
 var next_entry_time = new Date(0)
 var DAY = 1000 * 60 * 60 * 24
