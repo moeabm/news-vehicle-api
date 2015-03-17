@@ -8,18 +8,19 @@ var gps = require( __dirname + "/../bin/gps_listener.js")
 /* GET vehicle last gps. */
 router.get('/', function(req, res, next) {
   	gps.resLastCoords(res);
+});
 
+
+/* GET vehicle last gps. */
+router.get('/:num', function(req, res, next) {
+  	gps.resRecentLocs(res, req.params.num);
 });
 
 /* PUT vehicle last gps. */
 router.put('/', function(req, res, next) {
-	// res.json(gps);
-		//console.log(req)
-		db.run("INSERT INTO vehicle (lat, lon, stamp) VALUES (?, ?, ?)", [
-			 req.body.lat,
+	gps.putGPS(req.body.lat,
 			 req.body.lon,
-			 new Date()
-		] );
+			 new Date())
 		res.send('rew record Lat: '+ req.body.lat+', Lon: '+ req.body.lon);
 
 });
